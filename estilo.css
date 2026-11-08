@@ -1,0 +1,502 @@
+/* =====================================================
+   CARROS LENDÁRIOS
+   Asfalto + Rosso Corsa + ouro + cromado + bandeira quadriculada
+   ===================================================== */
+@font-face {
+    font-family: 'luck';
+    src: url(fontes/LuckiestGuy-Regular.ttf);
+}
+
+:root {
+    --asfalto:   #0b0b0d;
+    --carbono:   #141417;
+    --painel:    #1b1b20;
+    --linha:     #2c2c33;
+    --rosso:     #d90f1f;
+    --rosso-esc: #8e0912;
+    --ouro:      #d4af37;
+    --ouro-cl:   #f3dc8a;
+    --cromo:     linear-gradient(180deg, #f4f4f6 0%, #b9bcc3 45%, #7d818a 55%, #d9dbe0 100%);
+    --texto:     #ecebe6;
+    --texto-2:   #9a9aa3;
+    --titulo:    'luck', Impact, 'Arial Black', sans-serif;
+    --corpo:     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --xadrez: repeating-conic-gradient(#fff 0% 25%, #000 0% 50%) 0 0 / 16px 16px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+img { max-width: 100%; display: block; }
+input, button, textarea, select { font: inherit; }
+
+body {
+    font-family: var(--corpo);
+    color: var(--texto);
+    min-height: 100vh;
+    position: relative;
+    /* fibra de carbono sobre asfalto */
+    background-color: var(--asfalto);
+    background-image:
+        linear-gradient(135deg, #17171b 25%, transparent 25%),
+        linear-gradient(225deg, #17171b 25%, transparent 25%),
+        linear-gradient(45deg,  #17171b 25%, transparent 25%),
+        linear-gradient(315deg, #17171b 25%, #0b0b0d 25%);
+    background-size: 8px 8px;
+    background-position: 4px 0, 4px 0, 0 0, 0 0;
+}
+/* faixa quadriculada no rodapé da tela */
+body::after {
+    content: "";
+    position: fixed; left: 0; right: 0; bottom: 0;
+    height: 10px;
+    background: var(--xadrez);
+    z-index: 50;
+    pointer-events: none;
+}
+
+main { padding: 36px 20px 60px; }
+
+.titulo {
+    font-family: var(--titulo);
+    font-weight: normal;
+    text-align: center;
+    font-size: clamp(34px, 6vw, 56px);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    background: var(--cromo);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 3px 0 var(--rosso-esc));
+}
+
+/* ================= TOPO / MENU ================= */
+.topo {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; flex-wrap: wrap;
+    justify-content: space-between; align-items: center;
+    gap: 10px 24px;
+    padding: 10px 28px;
+    background: linear-gradient(180deg, #202026, #0e0e11);
+    border-bottom: 3px solid var(--rosso);
+    box-shadow: 0 6px 24px rgba(0,0,0,.7);
+}
+/* listras de corrida sob o topo */
+.topo::after {
+    content: "";
+    position: absolute; left: 0; right: 0; bottom: -9px;
+    height: 3px;
+    background: var(--ouro);
+}
+.logo {
+    font-family: var(--titulo);
+    font-size: 30px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--texto);
+    text-shadow: 2px 2px 0 var(--rosso-esc);
+}
+.logo span { color: var(--rosso); text-shadow: 2px 2px 0 #000; }
+
+.menu {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+    list-style: none;
+}
+.menu > li {
+    position: relative;
+    font-family: var(--titulo);
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.menu > li > a, .menu > li > span {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 16px;
+    color: var(--texto);
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 3px;
+    /* corte inclinado, estilo placa de corrida */
+    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+    transition: background .25s, color .25s;
+}
+.menu > li:hover > a, .menu > li:hover > span,
+.menu > li:focus-within > a, .menu > li:focus-within > span {
+    background: var(--rosso);
+    color: #fff;
+}
+.menu .usuario > a { padding: 4px 16px 4px 10px; text-transform: none; }
+.menu .usuario > a span { font-size: 15px; color: var(--ouro-cl); }
+.menu .usuario > a:hover { background: var(--painel); }
+
+.drop {
+    display: none;
+    position: absolute; top: 100%; left: 0;
+    min-width: 170px;
+    list-style: none;
+    padding: 6px 0;
+    background: var(--painel);
+    border: 1px solid var(--linha);
+    border-top: 3px solid var(--rosso);
+    box-shadow: 0 14px 30px rgba(0,0,0,.7);
+}
+.dropdown:hover .drop, .dropdown:focus-within .drop { display: block; }
+.drop li a {
+    display: block;
+    padding: 10px 18px;
+    color: var(--texto);
+    text-decoration: none;
+    transition: .2s;
+}
+.drop li a:hover { background: var(--rosso); color: #fff; padding-left: 26px; }
+
+/* foto/inicial do usuário no menu e nas listas */
+.fotoMenu, .avatar, .avatarGrande {
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--ouro);
+    box-shadow: 0 0 10px rgba(212,175,55,.35);
+    flex-shrink: 0;
+}
+.fotoMenu    { width: 38px; height: 38px; }
+.avatar      { width: 46px; height: 46px; }
+.avatarGrande{ width: 110px; height: 110px; }
+.semfoto {
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--rosso), var(--rosso-esc));
+    color: #fff;
+    font-family: var(--titulo);
+    font-size: 18px;
+    text-transform: uppercase;
+}
+.avatarGrande.semfoto { font-size: 46px; }
+
+/* ================= FORMULÁRIOS ================= */
+.formAdd {
+    position: relative;
+    width: 100%; max-width: 560px;
+    margin: 0 auto;
+    padding: 44px 40px 36px;
+    display: flex; flex-direction: column; gap: 6px;
+    background: linear-gradient(180deg, var(--painel), var(--carbono));
+    border: 1px solid var(--linha);
+    border-top: 6px solid var(--rosso);
+    border-radius: 6px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.7), inset 0 0 0 1px rgba(255,255,255,.03);
+}
+/* bandeira quadriculada na borda superior */
+.formAdd::before {
+    content: "";
+    position: absolute; left: 0; right: 0; top: -12px; height: 6px;
+    background: var(--xadrez);
+    background-size: 12px 12px;
+    border-radius: 6px 6px 0 0;
+}
+.formAdd h1 {
+    font-family: var(--titulo);
+    font-weight: normal;
+    text-align: center;
+    font-size: 36px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    color: var(--ouro-cl);
+    text-shadow: 2px 2px 0 var(--rosso-esc);
+}
+.formAdd label {
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ouro);
+}
+.formAdd label small { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--texto-2); }
+.formAdd input:not([type=submit]) {
+    width: 100%;
+    padding: 12px 14px;
+    color: var(--texto);
+    background: #0d0d10;
+    border: 1px solid var(--linha);
+    border-bottom: 2px solid #555;
+    border-radius: 3px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+.formAdd input:focus:not([type=submit]) {
+    border-color: var(--rosso);
+    box-shadow: 0 0 0 3px rgba(217,15,31,.25);
+}
+.formAdd input[type=file] { padding: 9px 12px; color: var(--texto-2); cursor: pointer; }
+.formAdd input[type=file]::file-selector-button {
+    margin-right: 12px; padding: 6px 14px;
+    font-weight: 700; color: #111;
+    background: var(--cromo);
+    border: 0; border-radius: 3px; cursor: pointer;
+}
+.formAdd input[type=submit] {
+    margin-top: 24px;
+    padding: 14px;
+    font-family: var(--titulo);
+    font-size: 22px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(180deg, #f0182a, var(--rosso-esc));
+    border: 0; border-radius: 3px;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #4d0409, 0 10px 24px rgba(217,15,31,.35);
+    transform: skewX(-6deg);
+    transition: transform .15s, box-shadow .15s, filter .2s;
+}
+.formAdd input[type=submit]:hover { filter: brightness(1.15); }
+.formAdd input[type=submit]:active { transform: skewX(-6deg) translateY(4px); box-shadow: 0 1px 0 #4d0409; }
+.cancelar {
+    margin-top: 10px; text-align: center;
+    color: var(--texto-2); text-decoration: none; font-size: 14px;
+}
+.cancelar:hover { color: var(--ouro-cl); }
+.fotoAtual { display: flex; justify-content: center; margin: 6px 0; }
+.fotoAtual.foto { max-width: 240px; margin: 6px auto; }
+
+/* ================= AVISOS ================= */
+.aviso {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    width: min(92vw, 480px);
+    padding: 28px 30px 20px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    background: var(--painel);
+    border: 2px solid var(--ouro);
+    border-left: 10px solid var(--ouro);
+    border-radius: 4px;
+    box-shadow: 0 0 0 100vmax rgba(0,0,0,.65), 0 20px 60px #000;
+    animation: entrada .25s ease-out;
+}
+.aviso p { font-family: var(--titulo); font-size: 22px; letter-spacing: 1px; margin-bottom: 6px; }
+.aviso small { display: block; margin-top: 10px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--texto-2); }
+.aviso.sucesso { border-color: #2ecc71; border-left-color: #2ecc71; }
+.aviso.sucesso p { color: #6ff0a3; }
+.aviso.erro { border-color: var(--rosso); border-left-color: var(--rosso); }
+.aviso.erro p { color: #ff7a85; }
+@keyframes entrada { from { opacity: 0; transform: translate(-50%, -46%); } }
+
+/* ================= CARDS DOS CARROS ================= */
+.cards {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 34px;
+    max-width: 1500px; margin: 0 auto;
+}
+.card {
+    position: relative;
+    width: 310px;
+    padding: 22px 20px 20px;
+    display: flex; flex-direction: column; gap: 14px;
+    background: linear-gradient(180deg, #202026 0%, #121215 100%);
+    border: 1px solid var(--linha);
+    border-radius: 6px;
+    box-shadow: 0 14px 34px rgba(0,0,0,.65);
+    overflow: hidden;
+    transition: transform .35s, box-shadow .35s, border-color .35s;
+}
+/* listra de corrida vermelha + ouro */
+.card::before {
+    content: "";
+    position: absolute; top: 0; left: 0; bottom: 0; width: 8px;
+    background: linear-gradient(180deg, var(--rosso) 0 70%, var(--ouro) 70% 100%);
+}
+.card:hover {
+    transform: translateY(-8px);
+    border-color: var(--rosso);
+    box-shadow: 0 24px 50px rgba(0,0,0,.8), 0 0 28px rgba(217,15,31,.4);
+}
+.card header { padding-left: 10px; text-align: left; }
+.card .montadora {
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--ouro);
+}
+.card h2 {
+    font-family: var(--titulo);
+    font-weight: normal;
+    font-size: 30px;
+    line-height: 1.05;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    word-break: break-word;
+    background: var(--cromo);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+/* plaquinha de número do carro */
+.numero {
+    position: absolute; top: 14px; right: 14px;
+    padding: 3px 9px;
+    font-family: var(--titulo);
+    font-size: 13px; letter-spacing: 1px;
+    color: #111;
+    background: var(--ouro);
+    border-radius: 2px;
+    transform: skewX(-10deg);
+}
+/* vitrine de showroom para a foto */
+.foto {
+    height: 180px;
+    display: flex; align-items: center; justify-content: center;
+    margin-left: 10px;
+    padding: 10px;
+    background: radial-gradient(ellipse at 50% 40%, #f3f3f5 0%, #a7aab1 70%, #6c6f77 100%);
+    border: 1px solid #000;
+    border-radius: 4px;
+    box-shadow: inset 0 0 24px rgba(0,0,0,.45);
+    overflow: hidden;
+}
+.foto img {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain;
+    transition: transform .6s;
+    filter: drop-shadow(0 8px 8px rgba(0,0,0,.45));
+}
+.card:hover .foto img { transform: scale(1.12); }
+
+.ficha {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    margin-left: 10px;
+}
+.ficha div {
+    padding: 8px 10px;
+    background: #0d0d10;
+    border: 1px solid var(--linha);
+    border-radius: 3px;
+}
+.ficha dt {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--texto-2);
+}
+.ficha dd {
+    margin-top: 2px;
+    font-family: var(--titulo);
+    font-size: 18px; letter-spacing: .5px;
+    color: var(--ouro-cl);
+    word-break: break-word;
+}
+
+/* ================= BOTÕES ALTERAR / EXCLUIR ================= */
+.botoes { display: flex; gap: 10px; }
+.card .botoes { margin-left: 10px; }
+.botoes a {
+    flex: 1;
+    padding: 9px 12px;
+    text-align: center;
+    font-family: var(--titulo);
+    font-size: 15px; letter-spacing: 1px; text-transform: uppercase;
+    text-decoration: none;
+    color: #111;
+    background: var(--cromo);
+    border-radius: 3px;
+    transition: transform .15s, filter .2s, box-shadow .2s;
+}
+.botoes a:hover { filter: brightness(1.1); box-shadow: 0 0 14px rgba(255,255,255,.3); transform: translateY(-2px); }
+.botoes a.perigo { color: #fff; background: linear-gradient(180deg, #f0182a, var(--rosso-esc)); }
+.botoes a.perigo:hover { box-shadow: 0 0 16px rgba(217,15,31,.7); }
+
+/* ================= PAGINAÇÃO ================= */
+.paginacao {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+    margin-top: 44px;
+}
+.paginacao a {
+    min-width: 40px; padding: 8px 12px;
+    text-align: center;
+    font-family: var(--titulo);
+    text-decoration: none;
+    color: var(--texto);
+    background: var(--painel);
+    border: 1px solid var(--linha);
+    border-radius: 3px;
+    transition: .2s;
+}
+.paginacao a:hover { border-color: var(--rosso); color: #fff; }
+.paginacao a.ativo {
+    color: #111;
+    background: var(--ouro);
+    border-color: var(--ouro);
+    box-shadow: 0 0 16px rgba(212,175,55,.5);
+}
+
+/* ================= PESQUISA ================= */
+.divPesquisar {
+    max-width: 560px;
+    margin: 0 auto 40px;
+    display: flex; flex-direction: column; gap: 10px;
+    text-align: center;
+}
+.divPesquisar label {
+    font-size: 12px; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--ouro);
+}
+#txtPesquisar {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 18px;
+    color: var(--texto);
+    background: #0d0d10;
+    border: 2px solid var(--linha);
+    border-radius: 40px;
+    outline: none;
+    text-align: center;
+    transition: .25s;
+}
+#txtPesquisar:focus { border-color: var(--rosso); box-shadow: 0 0 0 4px rgba(217,15,31,.25), 0 0 24px rgba(217,15,31,.3); }
+
+.vazio {
+    width: 100%;
+    padding: 40px 10px;
+    text-align: center;
+    font-family: var(--titulo);
+    font-size: 24px; letter-spacing: 1px;
+    color: var(--texto-2);
+}
+
+/* ================= TABELA (USUÁRIOS) ================= */
+.tabelaBox {
+    max-width: 900px; margin: 0 auto;
+    overflow-x: auto;
+    background: var(--painel);
+    border: 1px solid var(--linha);
+    border-top: 5px solid var(--rosso);
+    border-radius: 6px;
+    box-shadow: 0 16px 40px rgba(0,0,0,.65);
+}
+.tabela { width: 100%; border-collapse: collapse; }
+.tabela th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--ouro);
+    background: #101013;
+    border-bottom: 2px solid var(--ouro);
+}
+.tabela td {
+    padding: 12px 16px;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--linha);
+}
+.tabela tbody tr { transition: background .2s; }
+.tabela tbody tr:hover { background: #24242b; }
+.tabela em { color: var(--ouro-cl); font-size: 13px; }
+.tabela .botoes { min-width: 190px; }
+
+/* ================= RESPONSIVO ================= */
+@media (max-width: 720px) {
+    .topo { padding: 10px 14px; justify-content: center; }
+    .menu { justify-content: center; }
+    .formAdd { padding: 36px 22px 28px; }
+    .card { width: 100%; max-width: 340px; }
+}
